@@ -1,0 +1,33 @@
+#python
+def sysCall_thread():
+    #global stepx, stepy
+    # uncomment following for async./non-stepped mode:
+    sim.setThreadAutomaticSwitch(True)
+    print( "From threaded Python child script, threadMain")
+    cube=sim.getObject('.')
+    wnum = 2.5
+    hnum = 2.5
+    stepx = 0
+    stepy = 0
+    s = 0.004
+    pos=sim.getObjectPosition(cube,sim.handle_world)
+    while sim.getThreadExistRequest() == False:
+        x = round(pos[0], 2)
+        y = round(pos[1],2)
+        if x < hnum and y == 0:
+            stepx = s
+            stepy = 0
+        elif y < wnum and x == hnum:
+            stepx = 0
+            stepy = s
+        elif x == hnum and y == wnum:
+            stepx = -s
+            stepy = 0
+        elif y == wnum and x == 0:
+            stepx = 0
+            stepy = -s
+        pos[0] = pos[0] + stepx
+        pos[1] = pos[1] + stepy
+        sim.setObjectPosition(cube,sim.handle_world,pos)
+    print("From threaded Python child script, cleanup")
+  
